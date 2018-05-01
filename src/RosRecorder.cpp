@@ -45,6 +45,7 @@ static void log(const char *msg, ...) {
     __android_log_vprint(ANDROID_LOG_INFO, "RosRecorder", msg, args);
 #else
     vprintf(msg, args);
+    printf("\n")
 #endif
     va_end(args);
 }

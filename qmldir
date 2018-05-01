@@ -1,0 +1,2 @@
+module QMLRosRecorder
+plugin qmlrosrecorderplugin

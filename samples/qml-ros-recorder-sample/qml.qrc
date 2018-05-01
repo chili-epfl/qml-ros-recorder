@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>src/main.qml</file>
+        <file>src/pages/TopicSelection.qml</file>
+    </qresource>
+</RCC>

@@ -21,6 +21,8 @@ Page {
         onStatusChanged: {
             console.log("Status: " + rosRecorder.status)
         }
+
+        Component.onCompleted: startNode()
     }
 
     GridLayout {

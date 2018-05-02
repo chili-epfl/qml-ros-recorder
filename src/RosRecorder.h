@@ -83,6 +83,16 @@ public:
     void setTopicsToRecord(const QVariantList &topicsToRecord) { this->topicsToRecord = topicsToRecord; }
 
 public slots:
+    /**
+     * @brief Initializes the ROS node
+     */
+    void startNode();
+
+    /**
+     * @brief Kills the ROS node
+     */
+    void stopNode();
+
     void refreshTopics();
     void startRecording(const QString &name);
     void stopRecording(const QString &name);
@@ -104,8 +114,6 @@ signals:
 
 private:
     void stopAll();
-    void startNode();
-    void stopNode();
 
     QString status;                   ///< Status of this ROS node
     QString masterIp;                 ///< IP address of ROS master

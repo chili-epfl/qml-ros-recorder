@@ -29,6 +29,7 @@
 #else
 #include <cstdio>
 #endif
+#include <stdarg.h>
 
 #include <ros/ros.h>
 #include <rosbag_recorder/RecordTopics.h>
@@ -36,7 +37,7 @@
 
 #include <QNetworkInterface>
 
-#include <stdarg.h>
+#include <algorithm>
 
 static void log(const char *msg, ...) {
     va_list args;
@@ -67,8 +68,6 @@ RosRecorder::RosRecorder(QQuickItem* parent)
 : QQuickItem(parent) {
     status = "Idle";
     masterIp = "192.168.1.100";
-
-    startNode();
 }
 
 RosRecorder::~RosRecorder() {
@@ -116,11 +115,14 @@ void RosRecorder::startNode() {
 
 void RosRecorder::stopNode() {
     stopAll();
-
+    availableTopics.clear();
+    delete nodeHandle.release();
     ros::shutdown();
 
     status = "Idle";
-    emit RosRecorder::statusChanged();
+
+    emit availableTopicsChanged();
+    emit statusChanged();
 }
 
 void RosRecorder::refreshTopics() {
@@ -132,6 +134,8 @@ void RosRecorder::refreshTopics() {
         for (const auto &topic : topics) {
             availableTopics.append(QString(topic.name.c_str()));
         }
+
+        std::sort(availableTopics.begin(), availableTopics.end());
 
         emit availableTopicsChanged();
     }

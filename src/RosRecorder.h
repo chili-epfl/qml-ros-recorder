@@ -42,6 +42,7 @@ class RosRecorder : public QQuickItem {
     Q_PROPERTY(QString masterIp READ getMasterIp WRITE setMasterIp NOTIFY masterIpChanged)
     Q_PROPERTY(QVariantList availableTopics READ getAvailableTopics NOTIFY availableTopicsChanged)
     Q_PROPERTY(QVariantList topicsToRecord READ getTopicsToRecord WRITE setTopicsToRecord NOTIFY topicsToRecordChanged)
+    Q_PROPERTY(QVariantMap currentlyRecording READ getCurrentlyRecording NOTIFY currentlyRecordingChanged)
 
 public:
     /**
@@ -72,6 +73,7 @@ public:
 
     const QVariantList &getAvailableTopics() const { return availableTopics; }
     const QVariantList &getTopicsToRecord() const { return topicsToRecord; }
+    const QVariantMap &getCurrentlyRecording() const { return currentlyRecording; }
 
     /**
      * @brief Sets the ROS master's IP address
@@ -109,8 +111,8 @@ signals:
     void masterIpChanged();
 
     void availableTopicsChanged();
-
     void topicsToRecordChanged();
+    void currentlyRecordingChanged();
 
 private:
     void stopAll();
@@ -123,7 +125,7 @@ private:
     QVariantList availableTopics;
     QVariantList topicsToRecord;
 
-    QHash<QString, uint64_t> currentlyRecording; ///< name -> timestamp when started
+    QVariantMap currentlyRecording;   ///< name -> timestamp when started
 };
 
 #endif /* ROSNODE_H */

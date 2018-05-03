@@ -46,7 +46,7 @@ static void log(const char *msg, ...) {
     __android_log_vprint(ANDROID_LOG_INFO, "RosRecorder", msg, args);
 #else
     vprintf(msg, args);
-    printf("\n")
+    printf("\n");
 #endif
     va_end(args);
 }
@@ -146,7 +146,7 @@ void RosRecorder::startRecording(const QString &name) {
         return;
     }
 
-    if (!currentlyRecording.contains(name)) {
+    if (currentlyRecording.contains(name)) {
         stopRecording(name);
     }
 
@@ -164,7 +164,8 @@ void RosRecorder::startRecording(const QString &name) {
 
     if (client.call(srv)) {
         log("Response: %s", srv.response.success ? "true" : "false");
-        currentlyRecording.insert(name, ros::Time::now().toNSec());
+        currentlyRecording.insert(name, QVariant(static_cast<qulonglong>(ros::Time::now().toNSec())));
+        emit currentlyRecordingChanged();
     }
     else {
         log("Failed to call service \"record_topics\"");
@@ -176,6 +177,7 @@ void RosRecorder::stopRecording(const QString &name) {
         return;
     }
 
+    log("Stopping recording to bag %s.", name.toStdString().c_str());
     ros::ServiceClient client = nodeHandle->serviceClient<rosbag_recorder::StopRecording>("stop_recording");
     rosbag_recorder::StopRecording srv;
     srv.request.name = name.toStdString();
@@ -183,6 +185,7 @@ void RosRecorder::stopRecording(const QString &name) {
     if (client.call(srv)) {
         log("Response: %s", srv.response.success ? "true" : "false");
         currentlyRecording.remove(name);
+        emit currentlyRecordingChanged();
     }
     else {
         log("Failed to call service \"stop_recording\"");
@@ -204,4 +207,6 @@ void RosRecorder::stopAll() {
     }
 
     currentlyRecording.clear();
+
+    emit currentlyRecordingChanged();
 }

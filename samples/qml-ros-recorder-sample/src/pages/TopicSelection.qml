@@ -15,6 +15,8 @@ Page {
 
     title: qsTr("Select topics for recording")
 
+    property var recorder
+
     RosRecorder {
         id: rosRecorder
 
@@ -22,86 +24,96 @@ Page {
             console.log("Status: " + rosRecorder.status)
         }
 
-        Component.onCompleted: startNode()
+        Component.onCompleted: {
+        	recorder = rosRecorder
+        	startNode()
+        }
     }
 
-    GridLayout {
+	Flickable {
+	    anchors.fill: parent
         anchors.centerIn: parent
-        columns: 1
-        columnSpacing: 8
-        rowSpacing: 12
+	    contentHeight: mainLayout.height
+	    contentWidth: mainLayout.width
 
-        Repeater {
-        	id: topicRepeater
-        	Layout.bottomMargin: 24
+	    GridLayout {
+	    	id: mainLayout
+	        anchors.centerIn: parent
+	        columns: 1
+	        columnSpacing: 8
+	        rowSpacing: 12
 
-            model: rosRecorder.availableTopics
-            CheckBox {
-            	id: topicCheckBox
-                checked: false
-                text: modelData
+	        Repeater {
+	        	id: topicRepeater
+	        	Layout.bottomMargin: 24
 
-                contentItem: Text {
-                	text: topicCheckBox.text
-                	color: topicCheckBox.checkState == Qt.Checked ? "#66EE88" : "#888888"
-                	font.pointSize: 24
-                	leftPadding: topicCheckBox.indicator.width + topicCheckBox.spacing
-                }
-            }
-        }
+	            model: rosRecorder.availableTopics
+	            CheckBox {
+	            	id: topicCheckBox
+	                checked: false
+	                text: modelData
 
-        RowLayout {
-        	spacing: 32
-
-	        Button {
-	        	id: refreshButton
-	        	text: "Refresh topics"
-	        	onClicked: rosRecorder.refreshTopics()
-
-	        	contentItem: Text {
-			        text: refreshButton.text
-			        font.pointSize: 28
-			        horizontalAlignment: Text.AlignHCenter
-			        verticalAlignment: Text.AlignVCenter
-			        elide: Text.ElideRight
-			    }
+	                contentItem: Text {
+	                	text: topicCheckBox.text
+	                	color: topicCheckBox.checkState == Qt.Checked ? "#66EE88" : "#888888"
+	                	font.pointSize: 24
+	                	leftPadding: topicCheckBox.indicator.width + topicCheckBox.spacing
+	                }
+	            }
 	        }
 
-	        Button {
-	        	id: recordButton
-	        	property bool recording: false
+	        RowLayout {
+	        	spacing: 32
 
-	        	text: recording ? "Stop recording" : "Start recording"
-	        	onClicked: {
-	        		if (!recordButton.recording) {
-		        		var topics = []
-		        		for (var i = 0; i < topicRepeater.count; ++i) {
-		        			var checkBox = topicRepeater.itemAt(i)
-		        			if (checkBox.checked) {
-		        				topics.push(checkBox.text)
-		        			}
-		        		}
+		        Button {
+		        	id: refreshButton
+		        	text: "Refresh topics"
+		        	onClicked: rosRecorder.refreshTopics()
 
-		        		if (topics.length) {
-		        			rosRecorder.topicsToRecord = topics
-		        			rosRecorder.startRecording("test")
-		        			recordButton.recording = true
-		        		}
+		      //   	contentItem: Text {
+				    //     text: refreshButton.text
+				    //     font.pointSize: 28
+				    //     horizontalAlignment: Text.AlignHCenter
+				    //     verticalAlignment: Text.AlignVCenter
+				    //     elide: Text.ElideRight
+				    // }
+		        }
+
+		        Button {
+		        	id: recordButton
+
+		        	text: "Start recording"
+		        	onClicked: {
+		        		if (bagNameText.text != "") {
+			        		var topics = []
+			        		for (var i = 0; i < topicRepeater.count; ++i) {
+			        			var checkBox = topicRepeater.itemAt(i)
+			        			if (checkBox.checked) {
+			        				topics.push(checkBox.text)
+			        			}
+			        		}
+
+			        		if (topics.length) {
+			        			rosRecorder.topicsToRecord = topics
+			        			rosRecorder.startRecording(bagNameText.text)
+			        		}
+			        	}
 		        	}
-		        	else {
-		        		rosRecorder.stopRecording("test")
-		        		recordButton.recording = false
-		        	}
-	        	}
 
-	        	contentItem: Text {
-			        text: recordButton.text
-			        font.pointSize: 28
-			        horizontalAlignment: Text.AlignHCenter
-			        verticalAlignment: Text.AlignVCenter
-			        elide: Text.ElideRight
-			    }
-	        }
-	    }
+		      //   	contentItem: Text {
+				    //     text: recordButton.text
+				    //     font.pointSize: 28
+				    //     horizontalAlignment: Text.AlignHCenter
+				    //     verticalAlignment: Text.AlignVCenter
+				    //     elide: Text.ElideRight
+				    // }
+		        }
+
+		        TextField {
+		        	id: bagNameText
+		        	text: "Test"
+		        }
+		    }
+		}
     }
 }

@@ -21,6 +21,10 @@ ApplicationWindow {
     TopicSelection {
         id: topicSelection
     }
+
+    CurrentlyRecording {
+        id: currentlyRecording
+    }
     
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
@@ -38,6 +42,44 @@ ApplicationWindow {
         Label {
             text: stackView.currentItem.title
             anchors.centerIn: parent
+        }
+    }
+
+    Drawer {
+        id: drawer
+        width: root.width * 0.4
+        height: root.height
+
+        Column {
+            id: mainColumn
+            anchors.fill: parent
+            padding: 5
+
+            ItemDelegate {
+                id: startItem
+                text: qsTr("Select topics to record")
+                width: parent.width
+                onClicked: {
+                    stackView.push(topicSelection)
+                    drawer.close()
+                }
+            }
+
+            ItemDelegate {
+                text: qsTr("Currently recording")
+                width: parent.width
+                onClicked: {
+                    var recording = []
+                    for (var name in topicSelection.recorder.currentlyRecording) {
+                        recording.push([name, topicSelection.recorder.currentlyRecording[name]])
+                    }
+
+                    currentlyRecording.recorder = topicSelection.recorder
+                    currentlyRecording.recording = recording
+                    stackView.push(currentlyRecording)
+                    drawer.close()
+                }
+            }
         }
     }
 

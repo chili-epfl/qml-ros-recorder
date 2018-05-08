@@ -200,10 +200,14 @@ void RosRecorder::stopAll() {
     ros::ServiceClient client = nodeHandle->serviceClient<rosbag_recorder::StopRecording>("stop_recording");
     rosbag_recorder::StopRecording srv;
 
-
     for (auto it = currentlyRecording.begin(); it != currentlyRecording.end(); ++it) {
         srv.request.name = it.key().toStdString();
-        client.call(srv);
+        if (client.call(srv)) {
+            log("Response: %s", srv.response.success ? "true" : "false");
+        }
+        else {
+            log("Failed to call service \"stop_recording\"");
+        }
     }
 
     currentlyRecording.clear();

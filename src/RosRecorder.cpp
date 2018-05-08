@@ -75,6 +75,9 @@ RosRecorder::~RosRecorder() {
 }
 
 void RosRecorder::startNode() {
+    if (status == "Running")
+        return;
+
     QString nodeIp = getDeviceIpAddress();
     QString sanitizedNodeIp = QString(nodeIp).replace('.', '_');
     QByteArray tmp = nodeIp.toUtf8();
@@ -114,6 +117,9 @@ void RosRecorder::startNode() {
 }
 
 void RosRecorder::stopNode() {
+    if (status == "Idle")
+        return;
+
     stopAll();
     availableTopics.clear();
     delete nodeHandle.release();

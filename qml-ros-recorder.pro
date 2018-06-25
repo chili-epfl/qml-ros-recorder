@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = qmlrosrecorderplugin
+TARGET = rosrecorderplugin
 
 CONFIG += qt plugin c++11
 CONFIG -= android_install
@@ -13,14 +13,14 @@ QMAKE_CXXFLAGS += -O3
 QMAKE_CXXFLAGS_RELEASE += -O3
 
 TARGET = $$qtLibraryTarget($$TARGET)
-uri = QMLRosRecorder
+uri = ch.epfl.chili.ros.recorder
 
 HEADERS += \
-    src/QMLRosRecorderPlugin.h \
+    src/RosRecorderPlugin.h \
     src/RosRecorder.h
 
 SOURCES += \
-    src/QMLRosRecorderPlugin.cpp \
+    src/RosRecorderPlugin.cpp \
     src/RosRecorder.cpp
 
 OTHER_FILES += qmldir

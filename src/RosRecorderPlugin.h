@@ -16,15 +16,26 @@
  */
 
 /**
- * @file QMLRosRecorder.h
- * @brief Object that exposes the QMLRosRecorder plugin components as QML objects
+ * @file RosRecorder.h
+ * @brief Object that exposes the RosRecorder plugin components as QML objects
  * @author Florian Zimmermann
  * @date 2018-03-26
  */
 
-#include "QMLRosRecorderPlugin.h"
-#include "RosRecorder.h"
+#ifndef QMLROSPLUGIN_H
+#define QMLROSPLUGIN_H
 
-void QMLRosRecorderPlugin::registerTypes(const char* uri){
-    qmlRegisterType<RosRecorder>(uri, 1, 0, "RosRecorder");
-}
+#include <QQmlExtensionPlugin>
+#include <qqml.h>
+
+class RosRecorderPlugin : public QQmlExtensionPlugin {
+    /* *INDENT-OFF* */
+    Q_OBJECT
+    /* *INDENT-ON* */
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
+
+public:
+    void registerTypes(const char* uri);
+};
+
+#endif /* QMLROSPLUGIN_H */

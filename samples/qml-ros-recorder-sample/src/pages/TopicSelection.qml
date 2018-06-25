@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.3
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 
-import QMLRosRecorder 1.0
+import ch.epfl.chili.ros.recorder 1.0
 
 Page {
     id: root

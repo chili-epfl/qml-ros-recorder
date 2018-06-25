@@ -1,2 +1,2 @@
-module QMLRosRecorder
-plugin qmlrosrecorderplugin
+module ch.epfl.chili.ros.recorder
+plugin rosrecorderplugin

@@ -17,12 +17,17 @@ Page {
 
     property var recorder
 
+
+
+
     RosRecorder {
         id: rosRecorder
 
         onStatusChanged: {
             console.log("Status: " + rosRecorder.status)
         }
+        masterIp:"127.0.0.1"
+
 
         Component.onCompleted: {
         	recorder = rosRecorder
@@ -35,6 +40,23 @@ Page {
         anchors.centerIn: parent
 	    contentHeight: mainLayout.height
 	    contentWidth: mainLayout.width
+
+        ColumnLayout{
+            spacing: 20
+            Row{
+
+        TextField{
+            id: masterIPtx
+            text: "127.0.0.1"
+
+        }
+            Button{
+                id:resetMasterIpBtn
+                text:"Reset Master IP"
+                onClicked: rosRecorder.masterIp = masterIPtx.text
+
+            }
+            }
 
 	    GridLayout {
 	    	id: mainLayout
@@ -116,4 +138,7 @@ Page {
 		    }
 		}
     }
+    }
+
+
 }

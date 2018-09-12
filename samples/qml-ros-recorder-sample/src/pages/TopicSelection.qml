@@ -60,7 +60,7 @@ Page {
 
 	    GridLayout {
 	    	id: mainLayout
-	        anchors.centerIn: parent
+            //Layout.Center :parent
 	        columns: 1
 	        columnSpacing: 8
 	        rowSpacing: 12
